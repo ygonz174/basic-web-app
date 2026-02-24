@@ -5,7 +5,12 @@ export default function QueryProcessor(query: string): string {
     }
 
     try {
-      return decodeURIComponent(query);
+      const firstPass = decodeURIComponent(query);
+      try {
+        return decodeURIComponent(firstPass);
+      } catch {
+        return firstPass;
+      }
     } catch {
       return query;
     }
@@ -30,17 +35,18 @@ export default function QueryProcessor(query: string): string {
     return "yaritzag"; 
   }
 
-  const largestMatch = normalizedQuery.match(/largest\s*:\s*([^?]+)/i);
-  if (largestMatch) {
-    const numbers = (largestMatch[1].match(/-?\d+/g) || []).map((n) => parseInt(n, 10));
+  if (lowerQuery.includes("largest")) {
+    const numbers = (normalizedQuery.match(/-?\d+/g) || []).map((n) => parseInt(n, 10));
     if (numbers.length > 0) {
       return Math.max(...numbers).toString();
     }
   }
 
-  const additionMatch = normalizedQuery.match(/(-?\d+)\s*plus\s*(-?\d+)/i);
-  if (additionMatch) {
-    return (parseInt(additionMatch[1], 10) + parseInt(additionMatch[2], 10)).toString();
+  if (lowerQuery.includes("plus")) {
+    const numbers = (normalizedQuery.match(/-?\d+/g) || []).map((n) => parseInt(n, 10));
+    if (numbers.length >= 2) {
+      return (numbers[0] + numbers[1]).toString();
+    }
   }
 
   return "";
