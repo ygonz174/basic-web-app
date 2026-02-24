@@ -1,5 +1,20 @@
 export default function QueryProcessor(query: string): string {
-  if (query.toLowerCase().includes("shakespeare")) {
+  const decodedQuery = (() => {
+    if (!query) {
+      return "";
+    }
+
+    try {
+      return decodeURIComponent(query);
+    } catch {
+      return query;
+    }
+  })();
+
+  const normalizedQuery = decodedQuery.replace(/\+/g, " ").trim();
+  const lowerQuery = normalizedQuery.toLowerCase();
+
+  if (lowerQuery.includes("shakespeare")) {
     return (
       "William Shakespeare (26 April 1564 - 23 April 1616) was an " +
       "English poet, playwright, and actor, widely regarded as the greatest " +
@@ -7,23 +22,25 @@ export default function QueryProcessor(query: string): string {
     );
   }
 
-  if (query.toLowerCase().includes("name")) {
+  if (lowerQuery.includes("name")) {
     return "yaritzag";
   }
 
-  if (query.toLowerCase().includes("andrew id")) {
+  if (lowerQuery.includes("andrew id")) {
     return "yaritzag"; 
   }
-  const largestMatch = query.match(/largest:\s*([\d,\s]+)/i);
+
+  const largestMatch = normalizedQuery.match(/largest\s*:\s*([^?]+)/i);
   if (largestMatch) {
-    const numbers = largestMatch[1].split(',').map(n => parseInt(n.trim()));
-    return Math.max(...numbers).toString();
+    const numbers = (largestMatch[1].match(/-?\d+/g) || []).map((n) => parseInt(n, 10));
+    if (numbers.length > 0) {
+      return Math.max(...numbers).toString();
+    }
   }
 
-  // Helper function to handle addition
-  const additionMatch = query.match(/(\d+)\s*plus\s*(\d+)/i);
+  const additionMatch = normalizedQuery.match(/(-?\d+)\s*plus\s*(-?\d+)/i);
   if (additionMatch) {
-    return (parseInt(additionMatch[1]) + parseInt(additionMatch[2])).toString();
+    return (parseInt(additionMatch[1], 10) + parseInt(additionMatch[2], 10)).toString();
   }
 
   return "";

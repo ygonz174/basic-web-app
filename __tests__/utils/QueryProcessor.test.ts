@@ -33,4 +33,16 @@ describe("QueryProcessor", () => {
             "yaritzag"
         ));
     });
+
+    test('should solve addition with plus-delimited URL query', () => {
+        const query = "What+is+48+plus+67%3F";
+        const response: string = QueryProcessor(query);
+        expect(response).toBe("115");
+    });
+
+    test('should solve largest with plus-delimited URL query', () => {
+        const query = "Which+of+the+following+numbers+is+the+largest%3A+74%2C+33%2C+88%3F";
+        const response: string = QueryProcessor(query);
+        expect(response).toBe("88");
+    });
 });

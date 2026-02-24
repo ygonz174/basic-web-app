@@ -9,8 +9,9 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   console.log(req.url);
-  
-  const query = req.query.q as string;
+
+  const queryParam = req.query.q;
+  const query = Array.isArray(queryParam) ? queryParam.join(" ") : (queryParam || "");
   const response = QueryProcessor(query);
 
   res.status(200).send(response);
