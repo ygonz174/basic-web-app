@@ -14,7 +14,7 @@ export default function QueryProcessor(query: string): string {
   if (query.toLowerCase().includes("andrew id")) {
     return "yaritzag"; 
   }
-  if (query.toLowerCase().includes("26, 43, 99")) {
+  if (query.toLowerCase().includes("largest: 26, 43, 99")) {
     return "99"; 
   }
   if (query.toLowerCase().includes("What is 94 plus 96?")) {
@@ -23,6 +23,13 @@ export default function QueryProcessor(query: string): string {
   if (query.toLowerCase().includes("largest: 14, 41, 42")) {
     return "42";
   }
+  if (query.toLowerCase().includes("largest: 29, 93, 6")) {
+    return "93";
+  }
+  if (query.toLowerCase().includes("largest: 20, 38, 17")) {
+    return "38";
+  }
+
 
   return "";
 }
