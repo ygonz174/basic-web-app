@@ -14,23 +14,16 @@ export default function QueryProcessor(query: string): string {
   if (query.toLowerCase().includes("andrew id")) {
     return "yaritzag"; 
   }
-  if (query.toLowerCase().includes("largest: 26, 43, 99")) {
-    return "99"; 
+  const largestMatch = query.match(/largest:\s*([\d,\s]+)/i);
+  if (largestMatch) {
+    const numbers = largestMatch[1].split(',').map(n => parseInt(n.trim()));
+    return Math.max(...numbers).toString();
   }
-  if (query.toLowerCase().includes("What is 94 plus 96?")) {
-    return "190";
-  }
-  if (query.toLowerCase().includes("largest: 14, 41, 42")) {
-    return "42";
-  }
-  if (query.toLowerCase().includes("largest: 29, 93, 6")) {
-    return "93";
-  }
-  if (query.toLowerCase().includes("largest: 20, 38, 17")) {
-    return "38";
-  }
-  if (query.toLowerCase().includes("largest: 93, 53, 63")) {
-    return "93";
+
+  // Helper function to handle addition
+  const additionMatch = query.match(/(\d+)\s*plus\s*(\d+)/i);
+  if (additionMatch) {
+    return (parseInt(additionMatch[1]) + parseInt(additionMatch[2])).toString();
   }
 
   return "";
